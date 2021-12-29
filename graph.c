@@ -29,19 +29,18 @@ void insert_node(struct GRAPH_NODE_** head,int info[]){
     temp->next = NULL;// make next point to NULL
     temp->node_num=info[0];
     temp->edges=NULL;
+    pedge edge_iter=temp->edges;
     for (int i = 1; i < sizeof(info); i=i+2)
     {
     temp_edge = (pedge)malloc(sizeof(struct edge_)); // allocate memory using malloc()
     temp_edge->weight=info[i];
     temp_edge->endpoint=info[i+1];//need to check how to do this!!
-    if (temp->edges==NULL)
+    while (edge_iter->next=NULL)
     {
+        edge_iter=edge_iter->next;
     }
-        while (temp->edges->next==NULL)
-        {
-            /* code */
-        }
-        
+    //realloc
+    edge_iter->next=temp_edge;
     }
     
     struct GRAPH_NODE_ *iterator=*head;
@@ -79,20 +78,6 @@ void delete_node(struct GRAPH_NODE_** head,int node_id){
 }
 
 void delete_edge()
-
-// void insert_edge(struct GRAPH_NODE_** head,struct edge_** Edge_Head,int weight,int src,int dest){
-//     pedge curr_edge;
-//     curr_edge= (pedge)malloc(sizeof(struct edge_)); // allocate memory using malloc()
-//     curr_edge->weight=weight;
-
-//     while ((*head)->node_num!=src)
-//     {
-//         /* code */
-//     }
-    
-
-// }
-
 
 // pnode insert_node_cmd(pnode *head, int id){
 //     pnode temp,p;// declare two nodes temp and p

@@ -1,4 +1,4 @@
-#include "graph.h"
+//#include "graph.h"
 #include <stdio.h>
 
 typedef struct GRAPH_NODE_ *pnode;
@@ -16,10 +16,21 @@ typedef struct GRAPH_NODE_ {
     struct GRAPH_NODE_ *next;
 } node, *pnode;
 
-void build_graph_cmd(pnode *head){
-    pnode curr_node=head;
+pnode* build_graphcmd(int g_size){
+    pnode head = NULL;
+    head=(pnode)malloc(sizeof(struct GRAPH_NODE_));
+    head->node_num=0;
+    pnode temp =head;
+    for (int i =1; i < g_size; i++)
+    {
+        pnode next_Node=(pnode)malloc(sizeof(struct GRAPH_NODE_));
+        next_Node->node_num=i;
+        temp->next=next_Node;
+        printf("%d",temp->node_num);
+        temp=temp->next;
+    }
     
-    return 0;
+    return head;
 }
 
 void insert_node(struct GRAPH_NODE_** head,int info[]){
@@ -33,8 +44,8 @@ void insert_node(struct GRAPH_NODE_** head,int info[]){
     for (int i = 1; i < sizeof(info); i=i+2)
     {
     temp_edge = (pedge)malloc(sizeof(struct edge_)); // allocate memory using malloc()
-    temp_edge->weight=info[i];
-    temp_edge->endpoint=info[i+1];//need to check how to do this!!
+    temp_edge->weight=info[i+1];
+    temp_edge->endpoint=info[i];//need to check how to do this!!
     while (edge_iter->next=NULL)
     {
         edge_iter=edge_iter->next;
@@ -77,7 +88,8 @@ void delete_node(struct GRAPH_NODE_** head,int node_id){
 
 }
 
-void delete_edge()
+// void delete_edge();
+
 
 // pnode insert_node_cmd(pnode *head, int id){
 //     pnode temp,p;// declare two nodes temp and p

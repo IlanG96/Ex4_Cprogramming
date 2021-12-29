@@ -1,23 +1,55 @@
 #include <stdio.h>
-#include "graph.h"
+#include<stdlib.h>
+#include<string.h>
+#include<ctype.h>
+#include "graph.c"
 
 int main(){
-    char ch;
-    int num;
-    while (scanf("%c",&ch)==1)
+    char *str = NULL;
+    int ch;
+    size_t size = 0, len = 0;
+
+    while ((ch=getchar()) != EOF && ch != '\n') {
+        if (len + 1 >= size)
+        {
+            size = size * 2 + 1;
+            str = realloc(str, sizeof(char)*size);
+        }
+        str[len++] = ch;
+    }
+    // if (str != NULL) {
+    //     str[len] = '\0';
+    //     printf("%s\n", str);
+    //     free(str);
+    // }
+    for(int i=0;i<strlen(str);i=i+2)
     {
-        if (ch=='A')
+        if (str[i]=='A')
         {
-            /* code */
+            char temp=str[i+2];
+            int size_of_graph=temp - '0';
+            pnode* head=build_graphcmd(size_of_graph);
             continue;
         }
-        if (ch=='n')
+        if (str[i]=='n')
         {
-            /* code */
-            continue;
+            int j=i+2;
+            char *cptr = NULL;
+            cptr = (char*)malloc(sizeof(char));
+            if(cptr == NULL){
+                return 0;
+            }
+            while (isdigit(str[j])!=0)
+            {         
+            cptr = realloc(cptr,((strlen(cptr)+1)*sizeof(char)));
+            strncat(cptr, &str[j], 1);
+            //insert_node();
+            j=j+2;
+            }
+            i=j-2;
+            printf("%s\n",cptr);
+            free(cptr);
         }
-        
-        
     }
     
     

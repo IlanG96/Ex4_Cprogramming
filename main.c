@@ -8,7 +8,7 @@ int main(){
     char *str = NULL;
     int ch;
     size_t size = 0, len = 0;
-
+    pnode head;
     while ((ch=getchar()) != EOF && ch != '\n') {
         if (len + 1 >= size)
         {
@@ -28,7 +28,13 @@ int main(){
         {
             char temp=str[i+2];
             int size_of_graph=temp - '0';
-            pnode* head=build_graphcmd(size_of_graph);
+            build_graphcmd(size_of_graph);
+            // pnode num = head;
+            // for (int i = 0; i < size_of_graph; i++)
+            // {
+            //     printf("%d/n", num->node_num);
+            //     num = num->next;
+            //} 
             continue;
         }
         if (str[i]=='n')
@@ -43,11 +49,11 @@ int main(){
             {         
             cptr = realloc(cptr,((strlen(cptr)+1)*sizeof(char)));
             strncat(cptr, &str[j], 1);
-            //insert_node();
             j=j+2;
             }
             i=j-2;
-            printf("%s\n",cptr);
+            insert_node(cptr);
+            //printf("%s\n",cptr);
             free(cptr);
         }
     }

@@ -26,7 +26,8 @@ int main(){
     {
         if (str[i]=='A')
         {
-            char temp=str[i+2];
+            i=i+2;
+            char temp=str[i];
             int size_of_graph=temp - '0';
             build_graphcmd(size_of_graph);
             // pnode num = head;
@@ -56,9 +57,17 @@ int main(){
             //printf("%s\n",cptr);
             free(cptr);
         }
+        if (str[i]=='D')
+        {
+            i=i+2;
+            char temp=str[i];
+            int Node_id=temp - '0';
+            delete_node(Node_id);
+        }
+        
     }
     
     
-
+  PrintGraph();
     return 0;
 }

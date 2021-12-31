@@ -69,24 +69,6 @@ pnode find_node(int id){
     return NULL;
 }
 
-void insert_node(char* cptr){
-    int digit=cptr[0]-'0';// Node number
-    pnode temp = head;
-    temp=find_node(digit);//find the node
-    for (int i = 1; i < strlen(cptr); i=i+2)
-    {
-    int dest=cptr[i]-'0';
-    int weight=cptr[i+1]-'0'; 
-    add_edge(&(temp->edges),dest,weight);
-    }
-    //### Edge Print Test###
-    while (temp->edges!=NULL)
-    {
-    printf("Edge:\n Source:%d ,Dest:%d ,weight:%d\n",temp->node_num,temp->edges->dest->node_num,temp->edges->weight);
-    temp->edges=temp->edges->next;
-    }
-}
-
 void add_edge(edge **edge_head,int dest,int weight){
     pedge new_edge=(pedge)malloc(sizeof(struct edge_));//Create new edge
     //##Fill the edge info##
@@ -111,12 +93,79 @@ void add_edge(edge **edge_head,int dest,int weight){
     }
 } 
 
+void insert_node(char* cptr){
+    int digit=cptr[0]-'0';// Node number
+    pnode temp = head;
+    temp=find_node(digit);//find the node
+    for (int i = 1; i < strlen(cptr); i=i+2)
+    {
+    int dest=cptr[i]-'0';
+    int weight=cptr[i+1]-'0'; 
+    add_edge(&(temp->edges),dest,weight);
+    }
+    //### Edge Print Test###
+    // while (temp->edges!=NULL)
+    // {
+    // printf("Edge:\n Source:%d ,Dest:%d ,weight:%d\n",temp->node_num,temp->edges->dest->node_num,temp->edges->weight);
+    // temp->edges=temp->edges->next;
+    // }
+}
+
+void remove_Edges_of(int id){
+    pnode Node_iterator=head;
+    pedge prevE;
+    pedge Edge_Head;
+    pedge Edge_iterator;
+    while (Node_iterator!=NULL)
+    {
+        Edge_Head=Node_iterator->edges;
+        Edge_iterator=Node_iterator->edges;
+        int flag=0;
+        while (Edge_iterator!=NULL)
+        {
+            printf("The dest now is:%d\n",Edge_iterator->dest->node_num);
+            if (Edge_iterator->dest->node_num==id && flag==0)
+            {
+                if (Edge_iterator->next!=NULL)
+                {
+                    Edge_Head=Edge_iterator->next;
+                }
+                else
+                {
+                Edge_Head=NULL;
+                }
+                
+                free(Edge_iterator);
+                
+            }
+            if (Edge_iterator->dest->node_num==id && flag!=0)
+            {
+                prevE->next=Edge_iterator->next;
+                free(Edge_iterator);
+                Edge_iterator=prevE;
+            }
+            flag++;            
+            prevE=Edge_iterator;
+            Edge_iterator=Edge_iterator->next;
+        }
+        Node_iterator=Node_iterator->next;
+    }
+}
+
 void delete_node(int node_id){
     pnode iterator=head;
     pnode prev;
     // If head node itself holds the key to be deleted
     if(iterator!=NULL && iterator->node_num==node_id){
         head=iterator->next;// Changed head
+        pedge prevE=iterator->edges;
+        while (iterator->edges!=NULL)
+            {
+            prevE = iterator->edges;
+            iterator->edges=iterator->edges->next;
+            free(prevE);
+            }
+        remove_Edges_of(node_id);
         free(iterator);// free old head
         return;
     }
@@ -141,43 +190,23 @@ void delete_node(int node_id){
     free(prevE);
     }
     //###########
+    remove_Edges_of(node_id);
     free(iterator);
-}
-void remove_Edges_of(int id){
-    pnode Node_iterator=head;
-    pedge prevE;
-    pedge Edge_Head;
-    pedge Edge_iterator;
-    while (Node_iterator!=NULL)
-    {
-        Edge_Head=Node_iterator->edges;
-        Edge_iterator=Node_iterator->edges;
-        int flag=0;
-        while (Edge_iterator!=NULL)
-        {
-            if (Edge_iterator->dest->node_num==id && flag==0)
-            {
-                Edge_Head=Edge_iterator->next;
-                free(Edge_iterator);
-            }
-            if (Edge_iterator->dest->node_num==id && flag!=0)
-            {
-                prevE->next=Edge_iterator->next;
-                free(Edge_iterator);
-                Edge_iterator=prevE;
-            }
-            flag++;            
-            prevE=Edge_iterator;
-            Edge_iterator=Edge_iterator->next;
-        }
-    }
+    
 }
 
 void PrintGraph(){
     pnode temp = head;
+    pedge tempedge;
     while (temp!=NULL)
     {
+        tempedge=temp->edges;
         printf("Node ID:%d\n",temp->node_num);
+        while (tempedge!=NULL)
+        {
+            printf("Edge:\n Source:%d ,Dest:%d ,weight:%d\n",temp->node_num,tempedge->dest->node_num,tempedge->weight);
+            tempedge=tempedge->next;
+        }
         temp=temp->next;
     }
     

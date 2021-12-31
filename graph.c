@@ -126,7 +126,7 @@ void delete_node(int node_id){
     if(iterator==NULL)
     return;
     prev->next=iterator->next;
-    pedge * prevE=&(iterator->edges);
+    pedge * prevE=iterator->edges;
     while (iterator->edges!=NULL)
     {
     prevE = iterator->edges;

@@ -29,6 +29,11 @@ void  build_graphcmd(int g_size){
     //Check why +1
     for (int i =1; i < g_size+1; i++)
     {
+        if (i==g_size)
+        {
+            break;
+        }
+        
         pnode next_Node=(pnode)malloc(sizeof(struct g_node));
         next_Node->node_num=i;
         next_Node->num_of_edges=1;
@@ -54,7 +59,7 @@ pnode find_node(int id){
         return temp;
     }
     //else go over all the nodes and try to find the node
-    while (temp->next)//!=NULL)-haim wannbe IL
+    while (temp!=NULL)
     {
         //printf("now at: %d\n",temp->node_num);
         if((temp->node_num)==id)
@@ -125,17 +130,47 @@ void delete_node(int node_id){
     // If key was not present in linked list
     if(iterator==NULL)
     return;
+    //pnode iterator2=iterator;
     prev->next=iterator->next;
-    pedge * prevE=iterator->edges;
+    pedge prevE=iterator->edges;
+    //######Delete Edges in the node we delete####
     while (iterator->edges!=NULL)
     {
     prevE = iterator->edges;
     iterator->edges=iterator->edges->next;
     free(prevE);
-    
     }
-    
+    //###########
     free(iterator);
+}
+void remove_Edges_of(int id){
+    pnode Node_iterator=head;
+    pedge prevE;
+    pedge Edge_Head;
+    pedge Edge_iterator;
+    while (Node_iterator!=NULL)
+    {
+        Edge_Head=Node_iterator->edges;
+        Edge_iterator=Node_iterator->edges;
+        int flag=0;
+        while (Edge_iterator!=NULL)
+        {
+            if (Edge_iterator->dest->node_num==id && flag==0)
+            {
+                Edge_Head=Edge_iterator->next;
+                free(Edge_iterator);
+            }
+            if (Edge_iterator->dest->node_num==id && flag!=0)
+            {
+                prevE->next=Edge_iterator->next;
+                free(Edge_iterator);
+                Edge_iterator=prevE;
+            }
+            flag++;            
+            prevE=Edge_iterator;
+            Edge_iterator=Edge_iterator->next;
+        }
+    }
 }
 
 void PrintGraph(){

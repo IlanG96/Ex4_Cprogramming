@@ -4,6 +4,10 @@
 
 typedef struct g_node *pnode;
 struct g_node *head;
+static int Grpah_size=0;
+int cost=0;
+//int graph_Dist[][];
+
 
 typedef struct edge_ {
     int weight;
@@ -18,8 +22,10 @@ typedef struct g_node {
     struct g_node *next;
 } node, *pnode;
 
+
 void  build_graphcmd(int g_size){
     free(head);
+    Grpah_size=g_size;
     head = NULL;
     head=(pnode)malloc(sizeof(struct g_node));
     head->node_num=0;
@@ -40,17 +46,11 @@ void  build_graphcmd(int g_size){
         temp->next=next_Node;
         temp=temp->next;
     }
-//   printf("%d\n",head->node_num);
-//   printf("%d\n",head->next->node_num);
-//   printf("%d\n",head->next->next->node_num);
-//   printf("%d\n",head->next->next->next->node_num);
-
 
 }
 //######function that find the node according to his ID######
 pnode find_node(int id){
     pnode temp = head;
-    //printf("Start at: %d\n",temp->node_num);
     //if the node we are looking for is the head
     //return him
     if ((temp->node_num)==id)
@@ -103,12 +103,6 @@ void insert_node(char* cptr){
     int weight=cptr[i+1]-'0'; 
     add_edge(&(temp->edges),dest,weight);
     }
-    //### Edge Print Test###
-    // while (temp->edges!=NULL)
-    // {
-    // printf("Edge:\n Source:%d ,Dest:%d ,weight:%d\n",temp->node_num,temp->edges->dest->node_num,temp->edges->weight);
-    // temp->edges=temp->edges->next;
-    // }
 }
 
 void remove_Edges_of(int id){
@@ -118,31 +112,31 @@ void remove_Edges_of(int id){
     pedge Edge_iterator;
     while (Node_iterator!=NULL)
     {
-        Edge_Head=Node_iterator->edges;
+        Edge_Head=(Node_iterator->edges);
         Edge_iterator=Node_iterator->edges;
         int flag=0;
         while (Edge_iterator!=NULL)
         {
-            printf("The dest now is:%d\n",Edge_iterator->dest->node_num);
             if (Edge_iterator->dest->node_num==id && flag==0)
             {
                 if (Edge_iterator->next!=NULL)
                 {
                     Edge_Head=Edge_iterator->next;
+                    Node_iterator->edges=Edge_Head;
                 }
                 else
                 {
                 Edge_Head=NULL;
+                 Node_iterator->edges=NULL;
                 }
-                
                 free(Edge_iterator);
-                
+                Edge_iterator=Edge_Head;  
             }
+
             if (Edge_iterator->dest->node_num==id && flag!=0)
             {
                 prevE->next=Edge_iterator->next;
                 free(Edge_iterator);
-                Edge_iterator=prevE;
             }
             flag++;            
             prevE=Edge_iterator;
@@ -192,8 +186,64 @@ void delete_node(int node_id){
     //###########
     remove_Edges_of(node_id);
     free(iterator);
-    
+    Grpah_size--;
 }
+
+int min(int a,int b){
+    if (a>b) {
+        return b;}
+    else {
+         return a;
+        }
+    }
+    
+void Shortest_Path(int id1 ,int id2){
+    int size =Grpah_size;
+    int mat[size][size];
+    for (int i = 0; i < size; i++)
+    {
+        for (int j = 0; j < size; j++)
+        {
+           mat[i][j]=9999;
+        } 
+    }
+    
+    for (int src = 0; src < Grpah_size; src++)
+    {
+        mat[src][src]=0;
+        pnode source=find_node(src);
+        if(source!=NULL){
+        pedge edge_iter=source->edges;
+        while (edge_iter != NULL)
+        {
+            int dest=edge_iter->dest->node_num;
+            mat[src][dest]=edge_iter->weight;
+            edge_iter=edge_iter->next;
+        }
+    }
+    }
+        for(int u=0;u<Grpah_size;u++){
+            for(int v=0;v<Grpah_size;v++){
+                for(int k=0;k<Grpah_size;k++){
+                    if(mat[v][k]!=0 && mat[v][u]!=0 && mat[u][k]!=0){
+                        mat[v][k]=min(mat[v][k],mat[v][u]+mat[u][k]);
+
+                    }
+                    if(v!=k && mat[v][k]==0 && mat[v][u]!=0 && mat[u][k]!=0){
+                           mat[v][k]=mat[v][u]+mat[u][k];
+
+                }
+            
+            }
+        }
+    }
+
+    if(mat[id1-'0'][id2-'0']>=9999)
+    printf("Dijsktra shortest path: %d \n",-1);
+     else
+    printf("Dijsktra shortest path: %d \n",mat[id1-'0'][id2-'0']);
+}
+
 
 void PrintGraph(){
     pnode temp = head;

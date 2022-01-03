@@ -64,6 +64,17 @@ int main(){
             int Node_id=temp - '0';
             delete_node(Node_id);
         }
+        if(str[i] == 'S'){
+            i=i+2;
+            int src= str[i];
+            i=i+2;
+            int dest = str[i];
+            Shortest_Path(src,dest);
+        }
+        if(str[i]=='T'){
+
+        }
+
         
     }
     

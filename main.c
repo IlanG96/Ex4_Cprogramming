@@ -102,8 +102,6 @@ int main(){
             TSP_cmd(cptr);
         }   
     }
-    
-    
     //PrintGraph();
     return 0;
 }

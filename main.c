@@ -82,7 +82,7 @@ int main(){
             i=i+2;
             int dest = str[i];
             int ans=Shortest_Path(src,dest,1);
-             printf("Dijsktra shortest path: %d\n",ans);
+             printf("Dijsktra shortest path: %d \n",ans);
         }
         else if(str[i]=='T'){
             int j=i+2;
